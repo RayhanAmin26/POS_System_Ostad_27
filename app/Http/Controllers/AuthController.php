@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -17,24 +15,23 @@ class AuthController extends Controller
             'password'=>Hash::make($request->password),
         ]);
         $token = JWTAuth::fromUser($user);
-        return response()->json(['user'=>$user,'token'=>$token],201);
+        return response()->json(['user'=>$user,'token'=>$token], 201);
     }
 
     public function login(Request $request){
         $credentials = $request->only('email','password');
         if(!$token = JWTAuth::attempt($credentials)){
-            return response()->json(['error'=>'Invalid credentials'],401);
+            return response()->json(['error'=>'Invalid credentials'], 401);
         }
         return response()->json(['token'=>$token]);
     }
 
     public function me(){
-        $user = JWTAuth::parseToken()->authenticate();
-        return response()->json($user);
+        return response()->json(auth()->user());
     }
 
     public function logout(){
-        JWTAuth::invalidate(JWTAuth::getToken());
+        auth()->logout();
         return response()->json(['message'=>'Logged out']);
     }
 }
