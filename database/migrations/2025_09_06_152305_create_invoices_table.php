@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('invoices', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+    $table->decimal('total', 10, 2);
+    $table->timestamps();
+});
+
     }
 
     /**
